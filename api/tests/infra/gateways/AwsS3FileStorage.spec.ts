@@ -1,4 +1,4 @@
-import AwsS3FileStorage from "../../src/infra/gateways/AwsS3FileStorage";
+import AwsS3FileStorage from "../../../src/infra/gateways/AwsS3FileStorage";
 
 const mockS3ListBucketsPromise = jest
   .fn()
