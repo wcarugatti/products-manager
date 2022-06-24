@@ -10,12 +10,12 @@ export default class AddFileToQueue {
 
   async execute(fileEntity: FileEntity): Promise<string> {
     const timestamp = +new Date();
-    const storageName = `${timestamp}-${fileEntity.filename}`;
+    const storageFilename = `${timestamp}-${fileEntity.filename}`;
     await this.fileStorage.upload({
       file: fileEntity.file,
-      filename: storageName,
+      filename: storageFilename,
     });
-    await this.taskManager.add(storageName);
-    return storageName;
+    await this.taskManager.add(storageFilename);
+    return storageFilename;
   }
 }
