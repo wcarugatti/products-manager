@@ -4,7 +4,7 @@ import { csvUploadMiddleware } from "./../middlewares/multer";
 
 const router = Router();
 
-router.post("/addProducts", csvUploadMiddleware, FileController.addProducts);
+router.post("/addProductList", csvUploadMiddleware, FileController.addProductList);
 router.get("/getProductListStatus/:filename", FileController.getProductListStatus);
 
 export { router };

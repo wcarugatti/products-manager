@@ -5,7 +5,7 @@ import AwsS3FileStorage from "../infra/gateways/AwsS3FileStorage";
 import { FileEntity } from "./../interfaces/FileEntity.d";
 
 export default class FileController {
-  static async addProducts(req: Request, res: Response) {
+  static async addProductList(req: Request, res: Response) {
     const { file } = req;
 
     if (!file) {
