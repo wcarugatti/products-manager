@@ -33,22 +33,22 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     build:
-      dockerfile: Dockerfile.dev
-      context: ./worker
+      dockerfile: workerDockerfile.dev
+      context: ./app
     volumes:
       - /app/node_modules
-      - ./worker:/app
+      - ./app:/app
   api:
     restart: unless-stopped
     build:
-      dockerfile: Dockerfile.dev
-      context: ./api
+      dockerfile: apiDockerfile.dev
+      context: ./app
     environment:
       - REDIS_HOST=redis
       - AWS_S3_ENDPOINT=http://minio:9000
     volumes:
       - /app/node_modules
-      - ./api:/app
+      - ./app:/app
     depends_on:
       - postgres
     ports:
