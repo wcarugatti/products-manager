@@ -38,6 +38,12 @@ export default class FileController {
 
     const productListStatus = await redisFileQueue.getJobStatus(filename);
 
+    if (productListStatus === "notFound") {
+      return res.status(404).send({
+        productListStatus,
+      });
+    }
+
     res.send({
       productListStatus,
     });
