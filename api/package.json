@@ -4,13 +4,15 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "tsnd --poll --transpile-only --respawn --ignore-watch node_modules src/server.ts",
+    "dev:api": "tsnd --poll --transpile-only --respawn --ignore-watch node_modules src/api.ts",
+    "dev:worker": "tsnd --poll --transpile-only --respawn --ignore-watch node_modules src/worker.ts",
     "test": "jest --passWithNoTests --runInBand --no-cache",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test:coverage": "jest --coverage",
     "test:watch": "npm test -- --watch",
-    "start": "node dist/server.js",
+    "start:api": "node dist/api.js",
+    "start:worker": "node dist/worker.js",
     "build": "tsc"
   },
   "keywords": [],
