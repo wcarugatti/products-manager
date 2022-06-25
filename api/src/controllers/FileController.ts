@@ -26,4 +26,17 @@ export default class FileController {
       newFilename,
     });
   }
+
+  static async getProductListStatus(req: Request, res: Response) {
+    const { filename } = req.params;
+
+    if (!filename) {
+      return res.status(400).send("Filename not provided");
+    }
+
+    const redisFileQueue = RedisFileQueue.getInstance();
+
+    return await redisFileQueue.getJobStatus(filename);
+  }
+
 }
