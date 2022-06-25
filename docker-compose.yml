@@ -33,7 +33,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     build:
-      dockerfile: workerDockerfile.dev
+      dockerfile: Dockerfile.worker.dev
       context: ./app
     volumes:
       - /app/node_modules
@@ -41,7 +41,7 @@ services:
   api:
     restart: unless-stopped
     build:
-      dockerfile: apiDockerfile.dev
+      dockerfile: apiDockerfile.api.dev
       context: ./app
     environment:
       - REDIS_HOST=redis
