@@ -1,10 +1,11 @@
-import { FileStorage } from "../../src/interfaces/FileStorage";
-import { FileQueue } from "../../src/interfaces/FileQueue";
+import { FileStorage } from "../../src/interfaces/infra/FileStorage";
+import { FileQueue } from "../../src/interfaces/infra/FileQueue";
 import AddFileToQueue from "../../src/useCases/AddFileToQueue";
 
 describe("AddFileToQueue", () => {
   const mockFileStorage: FileStorage = {
     upload: jest.fn(),
+    getFile: jest.fn(),
   };
 
   const mockFileQueue: FileQueue = {
@@ -17,7 +18,7 @@ describe("AddFileToQueue", () => {
 
     const mockFilename = `${+mockDate}-testname`;
 
-    const file = Buffer.from("test_buffer")
+    const file = Buffer.from("test_buffer");
     const addFileToQueue = new AddFileToQueue(mockFileStorage, mockFileQueue);
     await addFileToQueue.execute({ file, filename: "testname" });
 

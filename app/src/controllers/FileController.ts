@@ -2,7 +2,7 @@ import AddFileToQueue from "./../useCases/AddFileToQueue";
 import { Request, Response } from "express";
 import RedisFileQueue from "./../infra/queues/RedisFileQueue";
 import AwsS3FileStorage from "../infra/gateways/AwsS3FileStorage";
-import { FileEntity } from "./../interfaces/FileEntity.d";
+import { FileEntity } from "../interfaces/entities/FileEntity";
 
 export default class FileController {
   static async addProductList(req: Request, res: Response) {
@@ -21,22 +21,20 @@ export default class FileController {
       filename: file.originalname,
     };
 
-    const newFilename = await addFileToQueue.execute(fileEntity);
-    res.send({
-      newFilename,
-    });
+    const { storageFilename, jobId } = await addFileToQueue.execute(fileEntity);
+    res.send({ storageFilename, jobId });
   }
 
   static async getProductListStatus(req: Request, res: Response) {
-    const { filename } = req.params;
+    const { jobId } = req.params;
 
-    if (!filename) {
-      return res.status(400).send("Filename not provided");
+    if (!jobId) {
+      return res.status(400).send("jobId not provided");
     }
 
     const redisFileQueue = RedisFileQueue.getInstance();
 
-    const productListStatus = await redisFileQueue.getJobStatus(filename);
+    const productListStatus = await redisFileQueue.getJobStatus(jobId);
 
     if (productListStatus === "notFound") {
       return res.status(404).send({

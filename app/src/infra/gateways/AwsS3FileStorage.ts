@@ -1,5 +1,5 @@
-import { FileEntity } from "../../interfaces/FileEntity";
-import { FileStorage } from "../../interfaces/FileStorage";
+import { FileEntity } from "../../interfaces/entities/FileEntity";
+import { FileStorage } from "../../interfaces/infra/FileStorage";
 import { S3 } from "aws-sdk";
 
 export default class AwsS3FileStorage implements FileStorage {
@@ -55,5 +55,9 @@ export default class AwsS3FileStorage implements FileStorage {
         Body: input.file,
       })
       .promise();
+  }
+
+  async getFile(filename: string): Promise<Buffer> {
+    throw new Error("Method not implemented.");
   }
 }

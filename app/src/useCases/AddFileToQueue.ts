@@ -1,6 +1,11 @@
-import { FileStorage } from "../interfaces/FileStorage";
-import { FileQueue } from "../interfaces/FileQueue";
-import { FileEntity } from "./../interfaces/FileEntity";
+import { FileStorage } from "../interfaces/infra/FileStorage";
+import { FileQueue } from "../interfaces/infra/FileQueue";
+import { FileEntity } from "../interfaces/entities/FileEntity";
+
+interface executeOutput {
+  storageFilename: string;
+  jobId: string;
+}
 
 export default class AddFileToQueue {
   constructor(
@@ -8,14 +13,14 @@ export default class AddFileToQueue {
     private readonly fileQueue: FileQueue,
   ) {}
 
-  async execute(fileEntity: FileEntity): Promise<string> {
+  async execute(fileEntity: FileEntity): Promise<executeOutput> {
     const timestamp = +new Date();
     const storageFilename = `${timestamp}-${fileEntity.filename}`;
     await this.fileStorage.upload({
       file: fileEntity.file,
       filename: storageFilename,
     });
-    await this.fileQueue.add(storageFilename);
-    return storageFilename;
+    const jobId = await this.fileQueue.add(storageFilename);
+    return { storageFilename, jobId };
   }
 }

@@ -8,7 +8,7 @@ describe("Product List integration test", () => {
   beforeAll(async () => {
     app = await createExpressApp();
   });
-  let newFilename: string;
+  let jobId: string;
 
   it("should add csv file to the queue and to storage", async () => {
     const res = await request(app)
@@ -16,19 +16,19 @@ describe("Product List integration test", () => {
       .attach("csvFile", path.resolve(__dirname, "..", "./mocks/products.csv"))
       .expect(200);
 
-    newFilename = res.body.newFilename;
+    jobId = res.body.jobId;
   });
 
   it("should return file status", async () => {
     await request(app)
-      .get("/getProductListStatus/" + newFilename)
+      .get("/getProductListStatus/" + jobId)
       .expect(200);
   });
   
   it("should return status code 404", async () => {
-    const randomFilename = "random filename"
+    const randomString = "random string"
     await request(app)
-      .get("/getProductListStatus/" + randomFilename)
+      .get("/getProductListStatus/" + randomString)
       .expect(404);
   });
 });
