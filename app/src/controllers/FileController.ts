@@ -36,7 +36,10 @@ export default class FileController {
 
     const redisFileQueue = RedisFileQueue.getInstance();
 
-    return await redisFileQueue.getJobStatus(filename);
-  }
+    const productListStatus = await redisFileQueue.getJobStatus(filename);
 
+    res.send({
+      productListStatus,
+    });
+  }
 }
