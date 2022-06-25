@@ -5,7 +5,7 @@ import { FileEntity } from "./../interfaces/FileEntity";
 export default class AddFileToQueue {
   constructor(
     private readonly fileStorage: FileStorage,
-    private readonly taskManager: FileQueue,
+    private readonly fileQueue: FileQueue,
   ) {}
 
   async execute(fileEntity: FileEntity): Promise<string> {
@@ -15,7 +15,7 @@ export default class AddFileToQueue {
       file: fileEntity.file,
       filename: storageFilename,
     });
-    await this.taskManager.add(storageFilename);
+    await this.fileQueue.add(storageFilename);
     return storageFilename;
   }
 }
