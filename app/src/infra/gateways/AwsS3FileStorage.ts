@@ -58,6 +58,10 @@ export default class AwsS3FileStorage implements FileStorage {
   }
 
   async getFile(filename: string): Promise<Buffer> {
-    throw new Error("Method not implemented.");
+    const s3Object = await this.s3Instance.getObject({
+      Bucket: this.bucketName,
+      Key: filename
+    }).promise()
+    return s3Object.Body as Buffer
   }
 }

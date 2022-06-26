@@ -6,6 +6,9 @@ const mockS3ListBucketsPromise = jest
 var mockS3Upload: jest.Mock;
 const mockS3CreateBucketPromise = jest.fn();
 
+const mockFile = Buffer.from("test_file");
+const mockS3GetObjectPromise = jest.fn().mockReturnValue({ Body: mockFile });
+
 jest.mock("aws-sdk", () => {
   mockS3Upload = jest.fn().mockReturnValue({
     promise: jest.fn(),
@@ -17,6 +20,9 @@ jest.mock("aws-sdk", () => {
       }),
       createBucket: () => ({
         promise: mockS3CreateBucketPromise,
+      }),
+      getObject: () => ({
+        promise: mockS3GetObjectPromise,
       }),
       upload: mockS3Upload,
     }),
@@ -54,5 +60,11 @@ describe("AwsS3FileStorage", () => {
       Key: mockInput.filename,
       Body: mockInput.file,
     });
+  });
+
+  it("should return file", async () => {
+    const file = await awsS3FileStorage.getFile("test_filename");
+    expect(mockS3GetObjectPromise).toBeCalled();
+    expect(file).toBe(mockFile);
   });
 });
