@@ -6,6 +6,7 @@ describe("AddFileToQueue", () => {
   const mockFileStorage: FileStorage = {
     upload: jest.fn(),
     getFile: jest.fn(),
+    deleteFile: jest.fn()
   };
 
   const mockFileQueue: FileQueue = {
