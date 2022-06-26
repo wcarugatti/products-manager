@@ -1,4 +1,5 @@
 export interface ProductEntity {
+  id?: string;
   lm: number;
   name: string;
   freeShipping: number;
