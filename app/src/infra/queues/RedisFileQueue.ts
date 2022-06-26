@@ -41,4 +41,16 @@ export default class RedisFileQueue implements FileQueue {
 
     return await currentJob.getState();
   }
+  
+  async setupWorker(workerProcessor: WorkerProcessor): Promise<void> {
+    await this.redisQueue.process(async (job, done) => {
+      try {
+        await workerProcessor.execute(job.data.filename);
+        done();
+      } catch (error) {
+        console.log(error.message);
+        done(error);
+      }
+    });
+  }
 }
