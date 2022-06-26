@@ -4,6 +4,7 @@ import { ProductsRepository } from "../../interfaces/repositories/ProductsReposi
 import { WorkerProcessor } from '../../interfaces/infra/WorkerProcessor';
 
 const PRODUCTS_CSV_FIRST_LINE = "lm;name;free_shipping;description;price;category";
+const COLUMNS_COUNT = 6
 
 export default class CsvProductListProcessor implements WorkerProcessor {
   constructor(
@@ -21,11 +22,10 @@ export default class CsvProductListProcessor implements WorkerProcessor {
     }
     
     const products: ProductEntity[] = [];
-    const numberOfColumns = 6;
 
     for (let i = 1; i < csvArray.length; i++) {
       const lineData = csvArray[i].split(";");
-      if (lineData.length === numberOfColumns) {
+      if (lineData.length === COLUMNS_COUNT) {
         products.push({
           lm: +lineData[0],
           name: lineData[1],
