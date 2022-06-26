@@ -48,7 +48,6 @@ export default class RedisFileQueue implements FileQueue {
         await workerProcessor.execute(job.data.filename);
         done();
       } catch (error) {
-        console.log(error.message);
         done(error);
       }
     });
