@@ -27,32 +27,46 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
-  worker:
+  api:
     restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    build:
+      dockerfile: Dockerfile.api.dev
+      context: ./app
     environment:
       - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - POSTGRES_HOST=postgres
+      - AWS_S3_ENDPOINT=http://minio:9000
+    volumes:
+      - /app/node_modules
+      - ./app:/app
+    ports:
+      - "5000:5000"
+  worker:
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
     build:
       dockerfile: Dockerfile.worker.dev
       context: ./app
     volumes:
       - /app/node_modules
       - ./app:/app
-  api:
-    restart: unless-stopped
-    build:
-      dockerfile: apiDockerfile.api.dev
-      context: ./app
+  migration:
     environment:
-      - REDIS_HOST=redis
-      - AWS_S3_ENDPOINT=http://minio:9000
-    volumes:
-      - /app/node_modules
-      - ./app:/app
+      - POSTGRES_HOST=postgres
     depends_on:
       - postgres
-    ports:
-      - "5000:5000"
+    build:
+      dockerfile: Dockerfile.migration.dev
+      context: ./app
+    
+
 volumes:
   db:
   minio-storage:

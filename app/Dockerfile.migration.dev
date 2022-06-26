@@ -1,0 +1,8 @@
+FROM node:14-alpine
+WORKDIR "/app"
+COPY ./package.json ./
+RUN apk update && apk add git && apk add bash && apk add --no-cache coreutils
+RUN npm install
+COPY . .
+RUN git clone https://github.com/vishnubob/wait-for-it.git
+CMD ["./wait-for-it/wait-for-it.sh", "postgres:5432", "--", "npm", "run", "migrate:run"]
