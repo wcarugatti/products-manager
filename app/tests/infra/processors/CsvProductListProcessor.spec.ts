@@ -8,6 +8,10 @@ import mockProductList from "../../mocks/mockProductList";
 describe("ProcessCsvProducts", () => {
   const mockRepository: ProductsRepository = {
     addProducts: jest.fn(),
+    removeProduct: jest.fn(),
+    getProducts: jest.fn(),
+    getProduct: jest.fn(),
+    updateProduct: jest.fn(),
   };
 
   const mockFile = fs.readFileSync(
@@ -17,7 +21,7 @@ describe("ProcessCsvProducts", () => {
   const mockFileStorage: FileStorage = {
     upload: jest.fn(),
     getFile: jest.fn().mockReturnValue(mockFile),
-    deleteFile: jest.fn()
+    deleteFile: jest.fn(),
   };
 
   it("should add csv products to the repository", async () => {
