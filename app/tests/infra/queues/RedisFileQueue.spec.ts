@@ -42,7 +42,7 @@ describe("RedisFileQueue", () => {
   it("should add filename to the queue", async () => {
     const mockFilename = "test_filename";
     const jobId = await redisFileQueue.add(mockFilename);
-    expect(mockAdd).toBeCalledWith(mockFilename);
+    expect(mockAdd).toBeCalledWith({ filename: mockFilename });
     expect(jobId).toBe("test_jobId");
   });
 

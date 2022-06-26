@@ -1,5 +1,6 @@
 import { FileQueue } from "../../interfaces/infra/FileQueue";
-import Queue, { JobId, JobStatus } from "bull";
+import Queue, { JobStatus } from "bull";
+import { WorkerProcessor } from "../../interfaces/infra/WorkerProcessor";
 
 export default class RedisFileQueue implements FileQueue {
   private static instance?: RedisFileQueue;
@@ -28,8 +29,8 @@ export default class RedisFileQueue implements FileQueue {
   }
 
   async add(filename: string): Promise<string> {
-    const job = await this.redisQueue.add(filename);
-    return String(job.id)
+    const job = await this.redisQueue.add({ filename });
+    return String(job.id);
   }
 
   async getJobStatus(jobId: string): Promise<JobStatus | "stuck" | "notFound"> {
