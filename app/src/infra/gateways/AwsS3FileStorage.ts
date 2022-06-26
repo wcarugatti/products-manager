@@ -58,10 +58,21 @@ export default class AwsS3FileStorage implements FileStorage {
   }
 
   async getFile(filename: string): Promise<Buffer> {
-    const s3Object = await this.s3Instance.getObject({
-      Bucket: this.bucketName,
-      Key: filename
-    }).promise()
-    return s3Object.Body as Buffer
+    const s3Object = await this.s3Instance
+      .getObject({
+        Bucket: this.bucketName,
+        Key: filename,
+      })
+      .promise();
+    return s3Object.Body as Buffer;
+  }
+
+  async deleteFile(filename: string): Promise<void> {
+    await this.s3Instance
+      .deleteObject({
+        Bucket: this.bucketName,
+        Key: filename,
+      })
+      .promise();
   }
 }

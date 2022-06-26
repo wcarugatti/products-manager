@@ -17,6 +17,7 @@ describe("ProcessCsvProducts", () => {
   const mockFileStorage: FileStorage = {
     upload: jest.fn(),
     getFile: jest.fn().mockReturnValue(mockFile),
+    deleteFile: jest.fn()
   };
 
   it("should add csv products to the repository", async () => {

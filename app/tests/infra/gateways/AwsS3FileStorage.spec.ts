@@ -5,6 +5,7 @@ const mockS3ListBucketsPromise = jest
   .mockReturnValue({ Buckets: [{ Name: "test_BucketName" }] });
 var mockS3Upload: jest.Mock;
 const mockS3CreateBucketPromise = jest.fn();
+const mockS3deleteObjectPromise = jest.fn();
 
 const mockFile = Buffer.from("test_file");
 const mockS3GetObjectPromise = jest.fn().mockReturnValue({ Body: mockFile });
@@ -23,6 +24,9 @@ jest.mock("aws-sdk", () => {
       }),
       getObject: () => ({
         promise: mockS3GetObjectPromise,
+      }),
+      deleteObject: () => ({
+        promise: mockS3deleteObjectPromise,
       }),
       upload: mockS3Upload,
     }),
@@ -66,5 +70,10 @@ describe("AwsS3FileStorage", () => {
     const file = await awsS3FileStorage.getFile("test_filename");
     expect(mockS3GetObjectPromise).toBeCalled();
     expect(file).toBe(mockFile);
+  });
+
+  it("should call s3 deleteObject", async () => {
+    await awsS3FileStorage.deleteFile("test_filename");
+    expect(mockS3deleteObjectPromise).toBeCalled();
   });
 });

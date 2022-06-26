@@ -38,5 +38,6 @@ export default class CsvProductListProcessor implements WorkerProcessor {
     }
 
     await this.productsRepository.addProducts(products);
+    await this.fileStorage.deleteFile(filename)
   }
 }
