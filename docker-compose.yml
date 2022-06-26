@@ -51,6 +51,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - POSTGRES_HOST=postgres
+      - AWS_S3_ENDPOINT=http://minio:9000
     build:
       dockerfile: Dockerfile.worker.dev
       context: ./app
@@ -65,6 +66,8 @@ services:
     build:
       dockerfile: Dockerfile.migration.dev
       context: ./app
+    volumes:
+      - ./app/src/infra/postgres/migrations:/app/src/infra/postgres/migrations
     
 
 volumes:
