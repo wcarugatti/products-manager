@@ -4,5 +4,5 @@ export default {
   collectCoverage: true,
   collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts","!**/migrations/*.ts"],
   preset: "ts-jest",
-  testMatch: ["**/**/*.spec.ts"],
+  testMatch: ["**/**/*.spec.ts","!**/integration/*.spec.ts"],
 };

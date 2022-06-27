@@ -10,6 +10,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test:coverage": "jest --coverage",
+    "test:all": "jest --config ./jest.all.config.ts --coverage",
     "test:watch": "npm test -- --watch",
     "start:api": "node dist/api.js",
     "start:worker": "node dist/worker.js",
