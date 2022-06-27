@@ -10,7 +10,10 @@ export default class ProductsRepositoryPostgres implements ProductsRepository {
   }
 
   async removeProduct(productId: string): Promise<void> {
-    await ProductModel.delete(productId);
+    const deleteResult = await ProductModel.delete(productId);
+    if(!deleteResult.affected){
+      throw new Error("Product not found")
+    }
   }
 
   async getProducts(): Promise<ProductModel[]> {
@@ -25,6 +28,9 @@ export default class ProductsRepositoryPostgres implements ProductsRepository {
     productId: string,
     newProduct: Partial<ProductEntity>,
   ): Promise<void> {
-    await ProductModel.update({ id: productId }, newProduct);
+    const updatedResult = await ProductModel.update({ id: productId }, newProduct);
+    if(!updatedResult.affected){
+      throw new Error("Product not found")
+    }
   }
 }
