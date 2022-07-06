@@ -21,8 +21,7 @@ describe("ProductsRepositoryPostgres", () => {
 
     await productsRepositoryPostgres.addProducts(mockProductList);
     refreshData();
-    expect(data.rows.length).toBe(6);
-    expect(data.rows[0].lm).toBe(mockProductList[0].lm);
+    expect(data.rows.length).toBe(4);
     expect(data.rows[0].description).toBe(mockProductList[0].description);
     expect(data.rows[0].name).toBe(mockProductList[0].name);
     expect(data.rows[0].price).toBe(mockProductList[0].price);
@@ -30,7 +29,7 @@ describe("ProductsRepositoryPostgres", () => {
     const deletedId = data.rows[0].id;
     await productsRepositoryPostgres.removeProduct(deletedId);
     refreshData();
-    expect(data.rows.length).toBe(5);
+    expect(data.rows.length).toBe(3);
     expect(data.rows.find((row) => row.id === deletedId)).toBe(undefined);
 
     const updatedId = data.rows[2].id;
@@ -44,9 +43,9 @@ describe("ProductsRepositoryPostgres", () => {
 
     const allProducts = await productsRepositoryPostgres.getProducts();
     expect(data.rows.length).toBe(allProducts.length);
-    expect(data.rows[4].description).toBe(allProducts[4].description);
+    expect(data.rows[2].description).toBe(allProducts[2].description);
 
-    const selectedProduct = data.rows[3];
+    const selectedProduct = data.rows[1];
     const product = await productsRepositoryPostgres.getProduct(
       selectedProduct.id,
     );

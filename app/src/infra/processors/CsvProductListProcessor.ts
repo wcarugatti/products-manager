@@ -3,8 +3,8 @@ import { FileStorage } from "../../interfaces/infra/FileStorage";
 import { ProductsRepository } from "../../interfaces/repositories/ProductsRepository";
 import { WorkerProcessor } from '../../interfaces/infra/WorkerProcessor';
 
-const PRODUCTS_CSV_FIRST_LINE = "lm;name;free_shipping;description;price;category";
-const COLUMNS_COUNT = 6
+const PRODUCTS_CSV_FIRST_LINE = "name;free_shipping;description;price;category";
+const COLUMNS_COUNT = 5
 
 export default class CsvProductListProcessor implements WorkerProcessor {
   constructor(

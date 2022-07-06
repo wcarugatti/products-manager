@@ -6,9 +6,6 @@ export class ProductModel extends BaseEntity implements ProductEntity {
   
   @PrimaryGeneratedColumn("uuid")
   id: string
-  
-  @Column()
-  lm: number;
 
   @Column()
   name: string;
