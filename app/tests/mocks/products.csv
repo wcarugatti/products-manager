@@ -1,7 +1,5 @@
-lm;name;free_shipping;description;price;category
-1001;Furadeira X;0;Furadeira eficiente X;100.00;123123
-1002;Furadeira Y;1;Furadeira super eficiente Y;140.00;123123
-1003;Chave de Fenda X;0;Chave de fenda simples;20.00;123123
-1008;Serra de Marmore;1;Serra com 1400W modelo 4100NH2Z-127V-L;399.00;123123
-1009;Broca Z;0;Broca simples;3.90;123123
-1010;Luvas de Proteção;0;Luva de proteção básica;5.60;123123
+name;free_shipping;description;price;category
+Phone X;0;Ultra Phone X;100.00;7844
+Phone Y;1;Super Phone Y;140.00;7844
+Simple Portable HD X;0;Simple Portable HD;200.00;4533
+Phone Case XX;1;Phone Case XX 4100NH2Z;399.00;4533

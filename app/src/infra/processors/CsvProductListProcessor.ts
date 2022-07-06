@@ -27,12 +27,11 @@ export default class CsvProductListProcessor implements WorkerProcessor {
       const lineData = csvArray[i].split(";");
       if (lineData.length === COLUMNS_COUNT) {
         products.push({
-          lm: +lineData[0],
-          name: lineData[1],
-          freeShipping: +lineData[2],
-          description: lineData[3],
-          price: +lineData[4],
-          category: +lineData[5],
+          name: lineData[0],
+          freeShipping: +lineData[1],
+          description: lineData[2],
+          price: +lineData[3],
+          category: +lineData[4],
         });
       }
     }
