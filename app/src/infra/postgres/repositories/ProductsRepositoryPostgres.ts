@@ -4,15 +4,15 @@ import { ProductsRepository } from "./../../../interfaces/repositories/ProductsR
 import { ProductModel } from "./../models/ProductModel";
 
 export default class ProductsRepositoryPostgres implements ProductsRepository {
-  async addProducts(productsList: DeepPartial<ProductModel[]>): Promise<void> {
-    const products = ProductModel.create(productsList);
-    await ProductModel.insert(products);
+  async addProduct(product: DeepPartial<ProductModel>): Promise<void> {
+    const newProduct = ProductModel.create(product);
+    await ProductModel.insert(newProduct);
   }
 
   async removeProduct(productId: string): Promise<void> {
     const deleteResult = await ProductModel.delete(productId);
-    if(!deleteResult.affected){
-      throw new Error("Product not found")
+    if (!deleteResult.affected) {
+      throw new Error("Product not found");
     }
   }
 
@@ -28,9 +28,12 @@ export default class ProductsRepositoryPostgres implements ProductsRepository {
     productId: string,
     newProduct: Partial<ProductEntity>,
   ): Promise<void> {
-    const updatedResult = await ProductModel.update({ id: productId }, newProduct);
-    if(!updatedResult.affected){
-      throw new Error("Product not found")
+    const updatedResult = await ProductModel.update(
+      { id: productId },
+      newProduct,
+    );
+    if (!updatedResult.affected) {
+      throw new Error("Product not found");
     }
   }
 }

@@ -4,10 +4,11 @@ import CsvProductListProcessor from "../../../src/infra/processors/CsvProductLis
 import fs from "fs";
 import path from "path";
 import mockProductList from "../../mocks/mockProductList";
+import { Readable } from "typeorm/platform/PlatformTools";
 
 describe("ProcessCsvProducts", () => {
   const mockRepository: ProductsRepository = {
-    addProducts: jest.fn(),
+    addProduct: jest.fn(),
     removeProduct: jest.fn(),
     getProducts: jest.fn(),
     getProduct: jest.fn(),
@@ -17,10 +18,10 @@ describe("ProcessCsvProducts", () => {
   const mockFile = fs.readFileSync(
     path.resolve(__dirname, "..", "..", "./mocks/products.csv"),
   );
-
+  const mockFileReadable = Readable.from(mockFile.toString());
   const mockFileStorage: FileStorage = {
     upload: jest.fn(),
-    getFile: jest.fn().mockReturnValue(mockFile),
+    getFileReadable: jest.fn().mockReturnValue(mockFileReadable),
     deleteFile: jest.fn(),
   };
 
@@ -30,13 +31,15 @@ describe("ProcessCsvProducts", () => {
       mockRepository,
     );
     await csvProductListProcessor.execute("test_filename");
-    expect(mockRepository.addProducts).toBeCalledWith(mockProductList);
+    expect(mockRepository.addProduct).toBeCalledWith(mockProductList[0]);
   });
 
   it("should return error with invalid csv", async () => {
     const mockWrongFormatFile = Buffer.from("test_wrong");
 
-    mockFileStorage.getFile = jest.fn().mockReturnValue(mockWrongFormatFile);
+    mockFileStorage.getFileReadable = jest
+      .fn()
+      .mockReturnValue(mockWrongFormatFile);
 
     const csvProductListProcessor = new CsvProductListProcessor(
       mockFileStorage,
@@ -45,6 +48,6 @@ describe("ProcessCsvProducts", () => {
 
     expect(
       csvProductListProcessor.execute("test_filename"),
-    ).rejects.toThrowError("Wrong csv format");
+    ).rejects.toThrowError("input.on is not a function");
   });
 });

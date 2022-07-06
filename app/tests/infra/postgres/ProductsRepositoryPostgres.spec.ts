@@ -19,7 +19,10 @@ describe("ProductsRepositoryPostgres", () => {
     refreshData();
     expect(data.rows).toHaveLength(0);
 
-    await productsRepositoryPostgres.addProducts(mockProductList);
+    for (const product of mockProductList) {
+      await productsRepositoryPostgres.addProduct(product);
+    }
+
     refreshData();
     expect(data.rows.length).toBe(4);
     expect(data.rows[0].description).toBe(mockProductList[0].description);

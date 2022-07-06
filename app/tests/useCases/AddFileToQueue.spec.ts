@@ -5,7 +5,7 @@ import AddFileToQueue from "../../src/useCases/AddFileToQueue";
 describe("AddFileToQueue", () => {
   const mockFileStorage: FileStorage = {
     upload: jest.fn(),
-    getFile: jest.fn(),
+    getFileReadable: jest.fn(),
     deleteFile: jest.fn()
   };
 

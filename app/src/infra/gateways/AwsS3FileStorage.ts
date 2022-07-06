@@ -1,6 +1,8 @@
 import { FileEntity } from "../../interfaces/entities/FileEntity";
 import { FileStorage } from "../../interfaces/infra/FileStorage";
 import { S3 } from "aws-sdk";
+import { ReadStream } from "s3-streams";
+import { Readable } from "stream";
 
 export default class AwsS3FileStorage implements FileStorage {
   private static instance?: AwsS3FileStorage;
@@ -57,14 +59,13 @@ export default class AwsS3FileStorage implements FileStorage {
       .promise();
   }
 
-  async getFile(filename: string): Promise<Buffer> {
-    const s3Object = await this.s3Instance
-      .getObject({
-        Bucket: this.bucketName,
-        Key: filename,
-      })
-      .promise();
-    return s3Object.Body as Buffer;
+  async getFileReadable(filename: string): Promise<Readable> {
+    const s3Stream = new ReadStream(this.s3Instance, {
+      Bucket: this.bucketName,
+      Key: filename,
+    });
+
+    return s3Stream;
   }
 
   async deleteFile(filename: string): Promise<void> {

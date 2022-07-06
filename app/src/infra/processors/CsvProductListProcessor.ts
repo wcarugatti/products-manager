@@ -1,10 +1,11 @@
 import { ProductEntity } from "../../interfaces/entities/ProductEntity";
 import { FileStorage } from "../../interfaces/infra/FileStorage";
-import { ProductsRepository } from "../../interfaces/repositories/ProductsRepository";
-import { WorkerProcessor } from '../../interfaces/infra/WorkerProcessor';
+import { WorkerProcessor } from "../../interfaces/infra/WorkerProcessor";
+import { ProductsRepository } from "./../../interfaces/repositories/ProductsRepository.d";
+import readline from "readline";
 
 const PRODUCTS_CSV_FIRST_LINE = "name;free_shipping;description;price;category";
-const COLUMNS_COUNT = 5
+const COLUMNS_COUNT = 5;
 
 export default class CsvProductListProcessor implements WorkerProcessor {
   constructor(
@@ -13,30 +14,29 @@ export default class CsvProductListProcessor implements WorkerProcessor {
   ) {}
 
   async execute(filename: string): Promise<void> {
-    const csv = await this.fileStorage.getFile(filename);
-    const csvString = csv.toString("utf-8");
-    const csvArray = csvString.split("\n");
+    const readable = await this.fileStorage.getFileReadable(filename);
+    const readlineReadable = readline.createInterface({
+      input: readable,
+    });
 
-    if (csvArray[0] !== PRODUCTS_CSV_FIRST_LINE) {
-      throw new Error("Wrong csv format");
-    }
-    
-    const products: ProductEntity[] = [];
-
-    for (let i = 1; i < csvArray.length; i++) {
-      const lineData = csvArray[i].split(";");
-      if (lineData.length === COLUMNS_COUNT) {
-        products.push({
-          name: lineData[0],
-          freeShipping: +lineData[1],
-          description: lineData[2],
-          price: +lineData[3],
-          category: +lineData[4],
-        });
+    for await (const line of readlineReadable) {
+      if (line === PRODUCTS_CSV_FIRST_LINE) {
+        continue;
       }
+      const lineData = line.split(";");
+      if (lineData.length !== COLUMNS_COUNT) {
+        continue;
+      }
+      const [name, freeShipping, description, price, category] = lineData;
+      const product: ProductEntity = {
+        name,
+        freeShipping: +freeShipping,
+        description,
+        price: parseFloat(price),
+        category: +category,
+      };
+      await this.productsRepository.addProduct(product);
     }
-
-    await this.productsRepository.addProducts(products);
-    await this.fileStorage.deleteFile(filename)
+    await this.fileStorage.deleteFile(filename);
   }
 }

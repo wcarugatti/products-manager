@@ -1,4 +1,5 @@
 import AwsS3FileStorage from "../../../src/infra/gateways/AwsS3FileStorage";
+import { Readable } from "stream";
 
 const mockS3ListBucketsPromise = jest
   .fn()
@@ -7,8 +8,15 @@ var mockS3Upload: jest.Mock;
 const mockS3CreateBucketPromise = jest.fn();
 const mockS3deleteObjectPromise = jest.fn();
 
-const mockFile = Buffer.from("test_file");
-const mockS3GetObjectPromise = jest.fn().mockReturnValue({ Body: mockFile });
+var mockFileReadable: Readable;
+var mockReadStream: jest.Mock;
+
+jest.mock("s3-streams", () => {
+  mockReadStream = jest.fn().mockImplementation(() => mockFileReadable);
+  return {
+    ReadStream: mockReadStream,
+  };
+});
 
 jest.mock("aws-sdk", () => {
   mockS3Upload = jest.fn().mockReturnValue({
@@ -21,9 +29,6 @@ jest.mock("aws-sdk", () => {
       }),
       createBucket: () => ({
         promise: mockS3CreateBucketPromise,
-      }),
-      getObject: () => ({
-        promise: mockS3GetObjectPromise,
       }),
       deleteObject: () => ({
         promise: mockS3deleteObjectPromise,
@@ -67,9 +72,9 @@ describe("AwsS3FileStorage", () => {
   });
 
   it("should return file", async () => {
-    const file = await awsS3FileStorage.getFile("test_filename");
-    expect(mockS3GetObjectPromise).toBeCalled();
-    expect(file).toBe(mockFile);
+    mockFileReadable = Readable.from("test_readable");
+    const readable = await awsS3FileStorage.getFileReadable("test_filename");
+    expect(readable).toEqual(mockFileReadable);
   });
 
   it("should call s3 deleteObject", async () => {

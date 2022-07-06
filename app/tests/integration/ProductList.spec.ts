@@ -37,9 +37,9 @@ describe("Product List integration test", () => {
 
   it("should return the added products", async () => {
     const res = await request(app).get("/products").expect(200);
-    expect(res.body).toHaveLength(6);
+    expect(res.body).toHaveLength(4);
 
-    currentProductId = res.body[3].id;
+    currentProductId = res.body[2].id;
   });
 
   it("should update product and return it updated", async () => {
